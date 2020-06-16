@@ -141,6 +141,12 @@ plot_grid(plots[[1]],
           rel_heights = c(1.0, 1.0, 1.0, 1.0, 1.0, 2.0), align = "v")
 
 df_khat %>%
+  mutate(quality = ifelse(khat < 0.5, "good", ifelse(khat < 0.7, "okay", "bad"))) %>%
+  group_by(quality) %>%
+  summarize(n = n()) %>%
+  mutate(f = n / sum(n))
+
+df_khat %>%
   mutate(quality = ifelse(khat < 0.5, "good", ifelse(khat < 0.7, "okay", "bad")),
          inrange = ifelse(khat < 1.09, 16, 4),
          khat = pmin(khat, 1.09)) %>%
